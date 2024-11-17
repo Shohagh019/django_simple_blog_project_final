@@ -1,26 +1,80 @@
- {% extends "base.html" %}
- {% block content %}
- <div class="container my-4">
-   <div class="row">
-     {% for post in data %}
-     <div class="col-md-6 mb-4">
-       <div class="card shadow-sm h-100" style="border-radius: 10px; overflow: hidden;">
-         <div class="card-body" style="background-color: #f8f9fa;">
-           <h5 class="card-title" style="font-weight: bold; color: #343a40;">{{ post.title|slice:":25" }}{% if post.title|length > 25 %}...{% endif %}</h5>
-           <h6 class="text-muted" style="font-size: 0.9em;">By {{ post.author.name }}</h6>
-           <p class="card-text" style="color: #6c757d;">{{ post.content|slice:":300" }}{% if post.content|length > 300 %}...{% endif %}</p>
-           <div style="font-size: 0.85em; margin-bottom: 1rem;">
-             {% for cat in post.category.all %}
-               <span class="badge text-bg-info p-2" style="background-color: #6c757d;">{{ cat.name }}</span>
-             {% endfor %}
-           </div>
-           <a href="{% url 'edit_post' post.id%}" class="btn btn-secondary" style="border-radius: 5px;">Edit Post</a>
-           <a href="{% url 'delete_post' post.id%}" class="btn btn-warning" style="border-radius: 5px;">Delete Post</a>
-         </div>
-       </div>
-     </div>
-     {% endfor %}
-   </div>
- </div>
- {% endblock %}
- 
+{% extends "base.html" %} {% block content %}
+<div class="container my-4">
+  <!-- <select
+    class="form-select"
+    aria-label="Default select example"
+    onchange="location = this.value"
+  >
+    <option value="" selected>Your interest on -></option>
+    {% for cat in category %}
+    <option value="{% url 'category_wise_post' cat.slug %}">
+      {{ cat.name }}
+    </option>
+    {% endfor %}
+  </select> -->
+  <div class="dropdown-container text-center mb-4">
+    <label for="categorySelect" class="form-label fw-bold text-secondary">Choose Your Interest:</label>
+    <select
+      id="categorySelect"
+      class="form-select shadow-sm"
+      aria-label="Default select example"
+      onchange="location = this.value"
+      style="
+        max-width: 400px;
+        margin: auto;
+        padding: 0.8rem;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 10px;
+        border: 2px solid #ced4da;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+      "
+    >
+      <option class="text-center" value="" selected>Your interest on →</option>
+      <option value="{% url 'home' %}" style="color: #6c757d;">All Categories</option>
+      {% for cat in category %}
+      <option
+        value="{% url 'category_wise_post' cat.slug %}"
+        style="color: #495057;"
+      >
+        {{ cat.name }}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="row">
+    {% for post in data %}
+    <div class="col-md-6 mb-4">
+      <div
+        class="card shadow-sm h-100"
+        style="border-radius: 10px; overflow: hidden"
+      >
+        <div class="card-body" style="background-color: #f8f9fa">
+          <h5 class="card-title" style="font-weight: bold; color: #343a40">
+            {{ post.title|slice:":25" }} {% if post.title|length > 25 %} ... 
+            {% endif %}
+          </h5>
+          <h6 class="text-muted" style="font-size: 0.9em">
+            By {{ post.author.first_name}} {{post.author.last_name}}
+          </h6>
+          <p class="card-text" style="color: #6c757d">
+            {{ post.content|slice:":300" }}
+            {% if post.content|length > 300 %}...{% endif %}
+          </p>
+          <div style="font-size: 0.85em; margin-bottom: 1rem">
+            {% for cat in post.category.all %}
+            <span
+              class="badge text-bg-info p-2 m-1"
+              style="background-color: #6c757d"
+              >{{ cat.name }}</span
+            >
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
