@@ -24,9 +24,9 @@ def register(request):
     if request.method == 'POST':
         form = forms.RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
             messages.success(request, 'Congratulations! Your Account Created Successfully!')
-            return redirect('home')
+            form.save()
+            # return redirect('login')
     else:
         form = forms.RegisterForm()
     return render(request, 'register.html', {'form': form, 'type': 'Register'})        
@@ -41,7 +41,7 @@ def user_login(request):
             if user is not None:
                 messages.success(request, 'Logged in Successfully!')
                 login(request, user)
-                return redirect('profile')
+                # return redirect('profile')
             else:
                 messages.warning(request, 'Incorrect Login Information!')
                 return redirect('register')

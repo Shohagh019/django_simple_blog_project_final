@@ -88,27 +88,19 @@
           </div>
         </div>
       </nav>
-      {% comment %} toast for messages {% endcomment %} {% for i in messages %}
-      {% comment %}
-      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <img src="..." class="rounded me-2" alt="..." />
-          <strong class="me-auto">Message</strong>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></button>
-        </div>
-        {% endcomment %}
-        <div class="">
-          <h3 class="text-{{i.tags}}">{{i}}</h3>
-        </div>
-        {% comment %}
-      </div>
-      {% endcomment %} {% endfor %}
     </header>
+    {% if messages %}
+    {% for message in messages %}
+      <div class="toast align-items-center text-bg-{{ message.tags }} border-0 fade show ms-auto" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body text-center">
+            {{ message }}
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endfor %}
+    {% endif %}
 
     {% block content %}
     <h1 style="text-align: center; text-overflow: ellipsis; font-weight: 400">
