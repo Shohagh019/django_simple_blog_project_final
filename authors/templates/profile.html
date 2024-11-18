@@ -1,29 +1,52 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container my-4">
-    <div class="row">
-      {% for post in data %}
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm h-100" style="border-radius: 10px; overflow: hidden;">
-          <div class="card-body" style="background-color: #f8f9fa;">
-            <h5 class="card-title" style="font-weight: bold; color: #343a40;">{{ post.title|slice:":25" }}{% if post.title|length > 25 %}...{% endif %}</h5>
-            <h6 class="text-muted" style="font-size: 0.9em;">By {{ post.author.first_name}} {{post.author.last_name}}</h6>
-            <p class="card-text" style="color: #6c757d;">{{ post.content|slice:":300" }}{% if post.content|length > 300 %}...{% endif %}</p>
-            <div style="font-size: 0.85em; margin-bottom: 1rem;">
-              {% for cat in post.category.all %}
-                <span class="badge text-bg-info p-2" style="background-color: #6c757d;">{{ cat.name }}</span>
-              {% endfor %}
-            </div>
-            <a href="{% url 'edit_post' post.id%}" class="btn btn-secondary" style="border-radius: 5px;">Edit Post</a>
-            <a href="{% url 'delete_post' post.id%}" class="btn btn-warning" style="border-radius: 5px;">Delete Post</a>
+  <div class="container text-center mt-4 mb-5">
+    <h1>
+      Your all post in <span class="aslihan-text text-warning">Aslihan's</span> Blog
+    </h1>
+  </div>
+  <div class="row">
+    {% for post in data %}
+    <div class="col-md-6 mb-4">
+      <div
+        class="card shadow-sm h-100"
+        style="border-radius: 10px; overflow: hidden"
+      >
+        <div class="card-body" style="background-color: #f8f9fa">
+          <h5 class="card-title" style="font-weight: bold; color: #343a40">
+            {{ post.title|slice:":25" }}{% if post.title|length > 25 %}...{% endif %}
+          </h5>
+          <h6 class="text-muted" style="font-size: 0.9em">
+            By {{ post.author.first_name}} {{post.author.last_name}}
+          </h6>
+          <p class="card-text" style="color: #6c757d">
+            {{ post.content|slice:":300" }}{% if post.content|length > 300%}...{% endif %}
+          </p>
+          <div style="font-size: 0.85em; margin-bottom: 1rem">
+            {% for cat in post.category.all %}
+            <span
+              class="badge text-bg-info p-2"
+              style="background-color: #6c757d"
+              >{{ cat.name }}</span
+            >
+            {% endfor %}
           </div>
+          <a
+            href="{% url 'edit_post' post.id%}"
+            class="btn btn-secondary"
+            style="border-radius: 5px"
+            >Edit Post</a
+          >
+          <a
+            href="{% url 'delete_post' post.id%}"
+            class="btn btn-warning"
+            style="border-radius: 5px"
+            >Delete Post</a
+          >
         </div>
       </div>
-      {% endfor %}
     </div>
+    {% endfor %}
   </div>
-
-  <a href="{% url 'update_profile' %}" class="btn btn-primary btn-lg shadow-lg">
-    <i class="bi bi-key-fill"></i> Update Your Profile Information
-</a>
+</div>
 {% endblock %}

@@ -26,7 +26,7 @@ def register(request):
         if form.is_valid():
             messages.success(request, 'Congratulations! Your Account Created Successfully!')
             form.save()
-            # return redirect('login')
+            return redirect('login')
     else:
         form = forms.RegisterForm()
     return render(request, 'register.html', {'form': form, 'type': 'Register'})        
@@ -41,7 +41,7 @@ def user_login(request):
             if user is not None:
                 messages.success(request, 'Logged in Successfully!')
                 login(request, user)
-                # return redirect('profile')
+                return redirect('profile')
             else:
                 messages.warning(request, 'Incorrect Login Information!')
                 return redirect('register')
@@ -55,7 +55,7 @@ def update_profile(request):
         form = forms.UpdateUserData(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your Profile Updated Successfully!')
+            messages.success(request, 'Your profile Updated Successfully!')
             return redirect('profile')
     else:
         form = forms.UpdateUserData(instance = request.user)
@@ -77,5 +77,6 @@ def password_change(request):
 
 @login_required
 def user_logout(request):
+    messages.warning(request, 'Logout Successfully!')
     logout(request)
     return redirect('home')

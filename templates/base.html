@@ -14,6 +14,94 @@
       crossorigin="anonymous"
     />
     <title>Aslihan's Blog</title>
+    <!-- styling navbar -->
+    <style>
+  .nav-item .styled-text {
+    font-size: 1.5rem; /* Base font size */
+    color: #fff; /* Default color for all text */
+    letter-spacing: 1px;
+    text-transform: lowercase; /* Ensures all text is lowercase */
+  }
+
+  .nav-item .styled-text .highlight-a {
+    font-size: 2rem; /* Larger size for 'A' */
+    color: #ffc107; /* Warning color for 'A' */
+    font-style: normal; /* Make 'A' non-italic for better emphasis */
+    text-transform: uppercase; /* Ensures 'A' is uppercase */
+  }
+
+  .nav-item .styled-text:hover {
+    text-shadow: 0px 4px 6px rgba(255, 255, 255, 0.5); /* Subtle hover effect */
+    transform: scale(1.05); /* Slight enlargement on hover */
+    transition: all 0.3s ease-in-out;
+  }
+      /* Gradient background for the navbar */
+      .navbar {
+        background: linear-gradient(90deg, #03fcce, #030005);
+        transition: background-color 0.5s ease-in-out;
+      }
+
+      /* Navbar link styles */
+      .navbar .nav-link {
+        color: #fff;
+        font-weight: 600;
+        transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+      }
+
+      .navbar .nav-link:hover {
+        color: #ffcc00;
+        transform: scale(1.1);
+      }
+
+      /* Dropdown menu styling */
+      .dropdown-menu {
+        background: linear-gradient(90deg, #05000a, #4adae2);
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      }
+
+      .dropdown-menu a {
+        color: #fff;
+        font-weight: 500;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: #ffcc00;
+        color: #4a4a4a;
+      }
+
+      /* Navbar toggle button styling */
+      .navbar-toggler {
+        border-color: #fff;
+        color: #760000;
+      }
+
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28155,155,155,1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        color: #760000;
+      }
+
+      /* Hover effect for the dropdown menu */
+      .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .dropdown-menu {
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      /* Gradient divider in dropdown */
+      .dropdown-divider {
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      
+    </style>
   </head>
   <body>
     <header>
@@ -37,13 +125,16 @@
                   class="nav-link active text-uppercase px-3"
                   aria-current="page"
                   href="{% url 'home' %}"
-                  >Home</a
                 >
+                  <span class="styled-text">
+                    <span class="highlight-a">A</span>slihan's
+                  </span>
+                </a>
               </li>
               {% if request.user.is_authenticated %}
               <li class="nav-item">
                 <a
-                  class="nav-link text-uppercase px-3"
+                  class="nav-link text-uppercase px-3 mt-3"
                   href="{% url 'add_post' %}"
                   >Add Post</a
                 >
@@ -53,12 +144,40 @@
             <div>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if request.user.is_authenticated %}
-                <li class="nav-item">
+                <li class="nav-item dropdown">
                   <a
-                    class="nav-link text-uppercase px-3"
-                    href="{% url 'profile' %}"
-                    >Profile</a
+                    class="nav-link dropdown-toggle text-uppercase px-3"
+                    href="#"
+                    id="profileDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
+                  {{request.user.first_name}} {{request.user.last_name}}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                    <li>
+                      <a class="dropdown-item" href="{% url 'update_profile' %}"
+                        >Update Profile</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'pass_change' %}"
+                        >Change Password</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'add_post' %}"
+                        >Add Post</a
+                      >
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'logout' %}"
+                        >Logout</a
+                      >
+                    </li>
+                  </ul>
                 </li>
                 <li class="nav-item">
                   <a
@@ -89,28 +208,42 @@
         </div>
       </nav>
     </header>
-    {% if messages %}
-    {% for message in messages %}
-      <div class="toast align-items-center text-bg-{{ message.tags }} border-0 fade show ms-auto" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body text-center">
-            {{ message }}
-          </div>
-          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
+    {% if messages %} {% for message in messages %}
+    <!-- <div
+      class="toast align-items-center text-bg-{{ message.tags }} show w-100 fade box-shadow-lg"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex text-center ">
+        <div class="toast-body">{{ message }}</div>
+        <button
+          type="button"
+          class="btn-close me-2 m-auto"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
       </div>
-    {% endfor %}
-    {% endif %}
-
+    </div> -->
+    <div class="alert alert-{{ message.tags }} alert-bg-{{ message.tags }} show w-100 fade box-shadow-lg " role="alert" id="alertMessage">
+      <div class="d-flex justify-content-center">{{ message }}</div>
+    </div>
+    {% endfor %} {% endif %} 
     {% block content %}
-    <h1 style="text-align: center; text-overflow: ellipsis; font-weight: 400">
-      Welcome to Aslihan's Blog
-    </h1>
-     {% endblock %}
+
+   
+    {% endblock %}
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script>
+      // Remove the alert after 2 seconds
+      setTimeout(function() {
+        var alert = document.getElementById('alertMessage');
+        alert.style.display = 'none'; // Hide alert
+      }, 4000); // Delay in milliseconds (2000ms = 2 seconds)
+    </script>
   </body>
 </html>

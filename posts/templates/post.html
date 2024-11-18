@@ -2,10 +2,14 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="container mt-5">
+  <div class="text-center mt-4 mb-5">
+    <h1>
+      Add your post in <span class="aslihan-text text-warning">Aslihan's</span> Blog
+    </h1>
+  </div>
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card shadow-lg bg-light p-4">
-          <h3 class="card-title text-center mb-4">Add Post to Aslihan's Blog</h3>
           <form method="post">
             {% csrf_token %}
             {{ form|crispy }}
